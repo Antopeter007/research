@@ -1,6 +1,6 @@
 # Research — Physical Design Studio
 
-A responsive, dependency-free VLSI Physical Design research workspace.
+A responsive VLSI Physical Design and electronics research workspace. The core interface is dependency-free; Python loads a pinned Pyodide runtime from its documented CDN.
 
 ## Workspace
 
@@ -14,6 +14,16 @@ A responsive, dependency-free VLSI Physical Design research workspace.
 - Official OpenROAD/OpenSTA resources, research searches and DOI links.
 - Daily motivational message from 31 original messages, selected by the visitor's local calendar date. It updates while the page remains open.
 
+## Engineering labs
+
+- Python editor, .py import/download, input/output widths, stdin, output capture and eight recent run snapshots. Code must read OUTPUT_BITS, INPUT_BITS, FRACTION_BITS or INPUT_TEXT to respond to those controls; hardcoded scripts are not rewritten.
+- Python runs in a terminable module worker using Pyodide 0.29.3. First load and optional packages need internet. Execution limits start after runtime/package loading. Output is capped at 64 KB. Native EDA executables and arbitrary desktop libraries are not supported.
+- BigInt binary/hex/signed conversion up to 256 bits, bit toggling, width-limited arithmetic, fixed-point quantisation, and expected/actual vector comparison with CSV export.
+- Electronics workbench with diagrams for a resistor divider, RC low/high-pass filters and a non-inverting amplifier. Ideal calculations, measured-value comparison, frequency-sweep table, Boolean gates and truth tables. Divider/RC SPICE netlists can be downloaded for ngspice; no SPICE engine is embedded.
+- Clock-period and standard-cell core-area planning estimates, plus official EDA references.
+
+These are scoped helpers, not arbitrary circuit-image recognition or full transistor-level/signoff simulation. Circuit input values, Python editor/settings/output and recent run snapshots are included in JSON backups. Merge preserves the active editor/settings and merges run history; replacement restores incoming settings.
+
 ## Saving and backups
 
 The workspace is saved in localStorage using `physical-design-research-v1`. It is local to the current website origin, browser profile and device. Papers and notes are never committed to the public GitHub repository. There is no login, backend, cloud database or automatic cross-device sync.
@@ -26,12 +36,14 @@ The schema migrates earlier version-1 workspaces and backups, preserving papers,
 
 ## Hosting
 
-GitHub Pages serves the main branch root. Open index.html locally for a basic preview, or use the deployed site for consistent browser-origin storage. No dependencies or build step are required.
+GitHub Pages serves the main branch root. Open index.html locally for a basic preview, or use the deployed site for consistent browser-origin storage. No build step is required. Serve over HTTP(S) for the Python module worker; opening a file:// URL is not sufficient for Python.
 
 ## Limitations
 
-This workspace organises research. It does not run EDA tools, analyse paper contents, synchronise devices, or verify signoff. Metrics must be entered from actual reports with the stated unit conventions. Timer completion is deadline-based and records finished focus sessions; unfinished sessions and breaks are excluded. Background alarm delivery is not guaranteed.
+This workspace organises research and runs browser-compatible Python and ideal circuit calculations. It does not run native EDA tools, analyse paper contents, synchronise devices, or verify signoff. Metrics must be entered from actual reports with the stated unit conventions. Timer completion is deadline-based and records finished focus sessions; unfinished sessions and breaks are excluded. Background alarm delivery is not guaranteed.
 
 ## Validation
 
 JavaScript syntax, HTML ID references, version-1 migration, missing/zero metrics, context comparison, duplicate merge and backup validation were checked. A DOM mock exercised full initialization, navigation, comparison rendering, paper saves and milestone saves. Browser preview QA was unavailable in the managed environment; the live deployment is verified separately.
+
+Additional validation: bit wrapping and 256-bit signed values, arithmetic shifts, vector mismatches, RC cutoff/DC behavior, op-amp clipping, logic gates, new backup-field round trips and execution of all five Python templates.
